@@ -21,6 +21,18 @@ If AMI (Amazon Machihe Image) is Ubuntu 18.04/20.04, please run `install_neuron_
 ```bash
 $ ./install_neuron_ubuntu.sh
 ```
+It is also good to check if dependencies are installed successfully with the command below.
+
+```bash
+$ source pytorch_venv/bin/activate
+$ pip list|grep -e neuron -e torch
+>>>
+neuron-cc               1.13.5.0+7dcf000a6
+neuronperf              1.6.1.0+a63399af5
+torch                   1.12.1
+torch-neuron            1.12.1.2.5.8.0
+torchvision             0.13.1
+```
 
 ### Sample codes
 - `compile_cv.py`: You can compile VGG, ResNet, ResNeXt, EfficientNet, YOLO-v5, and ViT models with this example code.
