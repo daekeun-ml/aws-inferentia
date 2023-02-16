@@ -75,7 +75,7 @@ def main(args):
     else:
         print("Compile model")
         net.analyze()
-        net.compile()
+        net.compile(save_path=args.save_path)
             
 if __name__ == "__main__":
     main(parse_args()) 
