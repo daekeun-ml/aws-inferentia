@@ -5,7 +5,7 @@ If AMI (Amazon Machihe Image) is Amazon Linux 2, please run `install_neuron_amzn
 ```bash
 $ ./install_neuron_amznlinux2.sh
 ```
-If AMI (Amazon Machihe Image) is Ubuntu 18.04/20.04, please run `install_neuron_ubuntu.sh`
+If AMI (Amazon Machihe Image) is Ubuntu Server 18.04 or Ubuntu Server 20.04, please run `install_neuron_ubuntu.sh`
 ```bash
 $ ./install_neuron_ubuntu.sh
 ```
@@ -37,8 +37,10 @@ $ python3 benchmark_nlp.py --max_length 128 --model_id distilbert-base-uncased-f
 # Image classification Example
 $ source pytorch_venv/bin/activate
 $ python3 compile_cv.py
-
 ```
+
+## Caution
+The input shape you use when compiling with `torch_neuronx.trace()` must match the input shape used during inference. This means that variable length input data cannot be used when generating sentences in transformer decoder-based model like GPT. Therefore, please be sure to feed sample data with a fixed token length (e.g. 128) and change the padding of the tokenizer to left. (`tokenizer.padding_side = "left"`) For more information, please see https://discuss.huggingface.co/t/batch-generation-with-gpt2/1517/2.
 
 ## References
 - AWS Neuron SDK GitHub: https://github.com/aws-neuron/aws-neuron-sdk

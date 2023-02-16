@@ -5,7 +5,7 @@ If AMI (Amazon Machihe Image) is Amazon Linux 2, please run `install_neuron_amzn
 ```bash
 $ ./install_neuron_amznlinux2.sh
 ```
-If AMI (Amazon Machihe Image) is Ubuntu 18.04/20.04, please run `install_neuron_ubuntu.sh`
+If AMI (Amazon Machihe Image) is Ubuntu Server 18.04 or Ubuntu Server 20.04, please run `install_neuron_ubuntu.sh`
 ```bash
 $ ./install_neuron_ubuntu.sh
 ```
