@@ -69,18 +69,18 @@ export PATH=/opt/aws/neuron/bin:$PATH
 # Neuron pip packages.
 
 sudo yum install -y python3.7-venv gcc-c++
-python3.7 -m venv pytorch_venv
-source pytorch_venv/bin/activate
+python3.7 -m venv aws_neuron_venv_pytorch
+source aws_neuron_venv_pytorch/bin/activate
 pip install -U pip
 
 # Instal Jupyter notebook kernel
 pip install ipykernel
-python3.7 -m ipykernel install --user --name pytorch_venv --display-name "Python (Neuron PyTorch)"
+python3.7 -m ipykernel install --user --name aws_neuron_venv_pytorch --display-name "Python (Neuron PyTorch)"
 pip install jupyter notebook
 pip install environment_kernels
 
 # Activate a Python 3.7 virtual environment where Neuron pip packages were installed
-source pytorch_venv/bin/activate
+source aws_neuron_venv_pytorch/bin/activate
 
 # Set Pip repository  to point to the Neuron repository
 pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com

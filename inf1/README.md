@@ -28,9 +28,13 @@ torchvision             0.13.1
 - `benchmark_nlp.py`: Perform latency and throughput benchmarking of BERT-based classification models. If you set `use_neuronperf=0`, only basic latency benchmarking is performed. Change `use_neuronperf=1` to perform benchmarking considering more diverse scenarios and throughput.
 
 ```bash
-# Example
-$ source pytorch_venv/bin/activate
+# BERT Example
+$ cd ~ && source pytorch_venv/bin/activate && cd aws-inferentia/inf1
 $ python3 benchmark_nlp.py --num_infers 1000 --max_length 128 --model_id distilbert-base-uncased-finetuned-sst-2-english --use_neuronperf 1
+
+# Image classification Example
+$ cd ~ && source aws_neuron_venv_pytorch/bin/activate && cd aws-inferentia/trn1_and_inf2
+$ python3 compile_cv.py
 ```
 
 ## References

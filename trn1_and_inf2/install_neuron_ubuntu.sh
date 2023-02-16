@@ -64,3 +64,6 @@ python -m pip install torch-neuronx torchvision
 python -m pip install transformers==4.25.1
 python -m pip install opencv-python-headless==4.6.0.66
 python -m pip install matplotlib scikit-learn seaborn
+
+# Current neuronx-cc requires numpy<=1.20.0,>=1.13.3
+pip install numpy==1.20.0

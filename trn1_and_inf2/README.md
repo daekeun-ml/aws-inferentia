@@ -31,11 +31,11 @@ torchvision                   0.14.1
 
 ```bash
 # BERT Example
-$ source pytorch_venv/bin/activate
+$ cd ~ && source aws_neuron_venv_pytorch/bin/activate && cd aws-inferentia/trn1_and_inf2
 $ python3 benchmark_nlp.py --max_length 128 --model_id distilbert-base-uncased-finetuned-sst-2-english
 
 # Image classification Example
-$ source pytorch_venv/bin/activate
+$ cd ~ && source aws_neuron_venv_pytorch/bin/activate && cd aws-inferentia/trn1_and_inf2
 $ python3 compile_cv.py
 ```
 
