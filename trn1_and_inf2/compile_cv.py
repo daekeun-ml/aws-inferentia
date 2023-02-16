@@ -3,18 +3,18 @@ import sys
 import torch
 import torch_neuronx
 import argparse
-from cv_helper_class import ImgClassificationNet, Yolov5Net, VisionTransformerNet
+from cv_helper_class import ImgClassificationNet, VisionTransformerNet
 from transformers import ViTFeatureExtractor, ViTForImageClassification
 from torchvision import models
 from common import preprocess_img
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--task", type=str, default="objdetect", 
-                        choices=['cnn_imgcls', 'vit_imgcls', 'objdetect'])
+    parser.add_argument("--task", type=str, default="cnn_imgcls", 
+                        choices=['cnn_imgcls', 'vit_imgcls'])
     parser.add_argument("--cnn_network", type=str, default="RESNET", 
                         choices=['VGG', 'RESNET', 'RESNEXT', 'EFFICIENTNET'])
-    parser.add_argument("--save_path", type=str, default="neuron_model/yolo5")
+    parser.add_argument("--save_path", type=str, default="neuron_model/resnet")
 
     parser_args, _ = parser.parse_known_args()
     return parser_args
@@ -44,14 +44,6 @@ def get_imgcls_model(args):
     net = ImgClassificationNet(model=model, model_name=model_name)
     return net, model, model_name
 
-def get_objdetect_model():
-    model_type = 'l'
-    assert(model_type in ['n', 's', 'm', 'l', 'x'])
-    model_name = f'yolov5{model_type}'  
-    model = torch.hub.load('ultralytics/yolov5', model_name, pretrained=True)
-    net = Yolov5Net(model=model, model_name=model_name, img_size=640)
-    return net, model, model_name
-
 def get_vit_model():
     model_name = "vit-base-patch16-224"
     model_type = "vit"
@@ -68,8 +60,6 @@ def main(args):
             net, model, model_name = get_imgcls_model(args)
         else:
             net, model, model_name = get_vit_model()    
-    elif args.task == "objdetect":
-        net, model, model_name = get_objdetect_model()
 
     neuron_model_path = os.path.join(args.save_path, f"neuron_{net.model_name}.pt")
     if os.path.exists(neuron_model_path):

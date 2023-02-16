@@ -21,53 +21,6 @@ coco91_labels = ['__background__', 'person', 'bicycle', 'car', 'motorcycle', 'ai
 # this will help us create a different color for each class
 coco91_colors = np.random.uniform(0, 255, size=(len(coco91_labels), 3))
 
-
-# this is required if you didn't load the model through hub before
-yolov5_path = f'{os.environ["HOME"]}/.cache/torch/hub/ultralytics_yolov5_master/'
-if os.path.exists(yolov5_path):
-    if yolov5_path not in sys.path: sys.path.insert(0, yolov5_path)
-    # imports from Yolov5 --> You need to install requirements.txt from
-    # https://pytorch.org/hub/ultralytics_yolov5/
-    try:
-        from utils.augmentations import letterbox
-        from utils.general import non_max_suppression, scale_boxes
-        from utils.plots import Annotator, colors
-    except Exception as e:
-        pass
-
-def preprocess_coco(img, img_size=(640,640), disable_letterbox=False, keep_aspect=True):
-    x = img
-    # preprocessing based on AutoShape's forward() call https://github.com/ultralytics/yolov5/blob/master/models/common.py#L560
-    if disable_letterbox:
-        if keep_aspect:
-            h,w,c=img.shape
-            if h!=w: # squared - make it square to avoid distortions
-                max_side = max(h,w)
-                new_img = np.zeros((max_side,max_side,c), dtype=np.uint8)
-                new_img[0:h, 0:w] = img[:]
-                x = new_img
-        x = cv2.resize(x, img_size)
-    else:
-        x = letterbox(x[...,::-1], new_shape=img_size, auto=False)[0] # letterbox to the customer's desired image size
-    x = np.expand_dims(x, 0)
-    x = np.ascontiguousarray(x.transpose((0, 3, 1, 2)))  # BHWC to BCHW
-    x = (x / 255).astype(np.float32)
-    return x     
-
-
-def postprocess_yolov5(predictions, raw_img, size=(640,640)):
-    labels = load_coco80_labels()
-    det = non_max_suppression(predictions)[0]
-    img = raw_img.copy()
-    annotator = Annotator(img, line_width=3, example=str(labels))
-    det[:, :4] = scale_boxes(size, det[:, :4], img.shape).round()
-    # Write results
-    for *xyxy, conf, cls in reversed(det):
-        c = int(cls)  # integer class        
-        label = f'{labels[c]} {conf:.2f}'
-        annotator.box_label(xyxy, label, color=colors(c, True))
-    return cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
- 
 def preprocess_imagenet(img, chw=True, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], img_size=(224,224), make_square=True):
     x = img.copy()
     h,w,c = x.shape
