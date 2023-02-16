@@ -63,8 +63,12 @@ pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
 # Install Neuron PyTorch
 pip install torch-neuron neuron-cc[tensorflow] "protobuf<4" torchvision
 
-# Install transformers
+# Install additional packages
 pip install transformers==4.25.1
+pip install opencv-python-headless==4.6.0.66
+pip install matplotlib scikit-learn seaborn
 
 # Install NeuronPerf
 pip install neuronperf --extra-index-url=https://pip.repos.neuron.amazonaws.com
+
+

@@ -1,60 +1,71 @@
 # Configure Linux for Neuron repository updates
-. /etc/os-release
-sudo tee /etc/apt/sources.list.d/neuron.list > /dev/null <<EOF
-deb https://apt.repos.neuron.amazonaws.com ${VERSION_CODENAME} main
+
+sudo tee /etc/yum.repos.d/neuron.repo > /dev/null <<EOF
+[neuron]
+name=Neuron YUM Repository
+baseurl=https://yum.repos.neuron.amazonaws.com
+enabled=1
+metadata_expire=0
 EOF
-wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add -
+sudo rpm --import https://yum.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB
 
 # Update OS packages
-sudo apt-get update -y
+sudo yum update -y
 
-# Install pip
-sudo apt install python3-pip -y
+# Install git
+sudo yum install git -y
 
-################################################################################################################
-# To install or update to Neuron versions 1.19.1 and newer from previous releases:
-# - DO NOT skip 'aws-neuron-dkms' install or upgrade step, you MUST install or upgrade to latest Neuron driver
-################################################################################################################
 
 # Install OS headers
-sudo apt-get install linux-headers-$(uname -r) -y
+sudo yum install kernel-devel-$(uname -r) kernel-headers-$(uname -r) -y
 
-# Install Neuron Driver
-sudo apt-get install aws-neuronx-dkms -y
+# Remove preinstalled packages and Install Neuron Driver and Runtime
+sudo yum remove aws-neuron-dkms -y
+sudo yum remove aws-neuronx-dkms -y
+sudo yum remove aws-neuronx-oci-hook -y
+sudo yum remove aws-neuronx-runtime-lib -y
+sudo yum remove aws-neuronx-collectives -y
+sudo yum install aws-neuronx-dkms-2.*  -y
+sudo yum install aws-neuronx-oci-hook-2.*  -y
+sudo yum install aws-neuronx-runtime-lib-2.*  -y
+sudo yum install aws-neuronx-collectives-2.*  -y
 
-####################################################################################
-# Warning: If Linux kernel is updated as a result of OS package update
-#          Neuron driver (aws-neuron-dkms) should be re-installed after reboot
-####################################################################################
+# Install EFA Driver(only required for multiinstance training)
+curl -O https://efa-installer.amazonaws.com/aws-efa-installer-latest.tar.gz
+wget https://efa-installer.amazonaws.com/aws-efa-installer.key && gpg --import aws-efa-installer.key
+cat aws-efa-installer.key | gpg --fingerprint
+wget https://efa-installer.amazonaws.com/aws-efa-installer-latest.tar.gz.sig && gpg --verify ./aws-efa-installer-latest.tar.gz.sig
+tar -xvf aws-efa-installer-latest.tar.gz
+cd aws-efa-installer && sudo bash efa_installer.sh --yes
+cd
+sudo rm -rf aws-efa-installer-latest.tar.gz aws-efa-installer
 
-# Update Neuron Tools
-sudo apt-get install aws-neuronx-tools -y
+# Remove pre-installed package and Install Neuron Tools
+sudo yum remove aws-neuron-tools  -y
+sudo yum remove aws-neuronx-tools  -y
+sudo yum install aws-neuronx-tools-2.*  -y
 
 export PATH=/opt/aws/neuron/bin:$PATH
 
-# Only for Ubuntu 20 - Install Python3.7
-sudo add-apt-repository ppa:deadsnakes/ppa
-sudo apt-get install python3.7 -y
 
-# Install Python venv and activate Python virtual environment to install    
+# Install Python venv and activate Python virtual environment to install
 # Neuron pip packages.
-sudo apt-get install -y python3.7-venv g++
-python3.7 -m venv pytorch_venv
-
-# Activate a Python 3.7 virtual environment where Neuron pip packages were installed 
-source pytorch_venv/bin/activate
+python3.7 -m venv aws_neuron_venv_pytorch
+source aws_neuron_venv_pytorch/bin/activate
 pip install -U pip
 
-# Set Pip repository  to point to the Neuron repository
-pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
+# Set pip repository pointing to the Neuron repository 
+python -m pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
 
-pip install --upgrade pip
+# Install wget, awscli
+pip install wget
+pip install awscli
 
-# Install Neuron PyTorch
-pip install torch-neuron neuron-cc[tensorflow] "protobuf<4" torchvision
+# Install Neuron packages
+pip install neuronx-cc==2.* 
+pip install torch-neuronx torchvision
 
-# Install transformers
+# Install additional packages
 pip install transformers==4.25.1
-
-# Install NeuronPerf
-pip install neuronperf --extra-index-url=https://pip.repos.neuron.amazonaws.com
+pip install opencv-python-headless==4.6.0.66
+pip install matplotlib scikit-learn seaborn

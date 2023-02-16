@@ -45,16 +45,22 @@ python3.7 -m venv pytorch_venv
 source pytorch_venv/bin/activate
 pip install -U pip
 
+# Instal Jupyter notebook kernel
+pip install ipykernel
+python3.7 -m ipykernel install --user --name pytorch_venv --display-name "Python (Neuron PyTorch)"
+pip install jupyter notebook
+pip install environment_kernels
+
 # Set Pip repository  to point to the Neuron repository
 pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
-
-pip install --upgrade pip
 
 # Install Neuron PyTorch
 pip install torch-neuron neuron-cc[tensorflow] "protobuf<4" torchvision
 
-# Install transformers
+# Install additional packages
 pip install transformers==4.25.1
+pip install opencv-python-headless==4.6.0.66
+pip install matplotlib scikit-learn seaborn
 
 # Install NeuronPerf
 pip install neuronperf --extra-index-url=https://pip.repos.neuron.amazonaws.com
