@@ -41,6 +41,6 @@ $ python3 compile_cv.py
 - AWS Neuron SDK GitHub: https://github.com/aws-neuron/aws-neuron-sdk
 - AWS Neuron Samples GitHub: https://github.com/aws-neuron/aws-neuron-samples
 - Getting Started AWS Neuron: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/quick-start/torch-neuron.html
-* PyTorch Neuron: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/index.html
+- PyTorch Neuron: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/index.html
 - TensorFlow Neuron: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/tensorflow/index.html
 - NeuronPerf: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/tools/neuronperf
