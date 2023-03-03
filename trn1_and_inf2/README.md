@@ -39,6 +39,24 @@ $ cd ~ && source aws_neuron_venv_pytorch/bin/activate && cd aws-inferentia/trn1_
 $ python3 compile_cv.py
 ```
 
+## Sample codes (`transformers-neuronx`)
+Please refer to https://github.com/aws-neuron/transformers-neuronx.
+
+
+- `compile_cv.py`: You can compile VGG, ResNet, ResNeXt, EfficientNet, and ViT models with this example code.
+- `compile_nlp.py`: You can compile BERT-based encoder models like BERT, DistilBERT, ALBERT, RoBERTa with this example code.
+- `benchmark_nlp.py`: Perform latency and throughput benchmarking of BERT-based classification models.
+
+```bash
+# BERT Example
+$ cd ~ && source aws_neuron_venv_pytorch/bin/activate && cd aws-inferentia/trn1_and_inf2
+$ python3 benchmark_nlp.py --max_length 128 --model_id distilbert-base-uncased-finetuned-sst-2-english
+
+# Image classification Example
+$ cd ~ && source aws_neuron_venv_pytorch/bin/activate && cd aws-inferentia/trn1_and_inf2
+$ python3 compile_cv.py
+```
+
 ## Caution
 The input shape you use when compiling with `torch_neuronx.trace()` must match the input shape used during inference. This means that variable length input data cannot be used when generating sentences in transformer decoder-based model like GPT. Therefore, please be sure to feed sample data with a fixed token length (e.g. 128) and change the padding of the tokenizer to left. (`tokenizer.padding_side = "left"`) For more information, please see https://discuss.huggingface.co/t/batch-generation-with-gpt2/1517/2.
 
@@ -46,5 +64,5 @@ The input shape you use when compiling with `torch_neuronx.trace()` must match t
 - AWS Neuron SDK GitHub: https://github.com/aws-neuron/aws-neuron-sdk
 - AWS Neuron Samples GitHub: https://github.com/aws-neuron/aws-neuron-samples
 - Getting Started AWS Neuron: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/general/quick-start/torch-neuron.html
-* PyTorch Neuron: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/index.html
+- PyTorch Neuron: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/torch/index.html
 - TensorFlow Neuron: https://awsdocs-neuron.readthedocs-hosted.com/en/latest/frameworks/tensorflow/index.html
