@@ -40,21 +40,35 @@ $ python3 compile_cv.py
 ```
 
 ## Sample codes (`transformers-neuronx`)
+`transformers-neuronx` can be used to speed up the compilation and sentence generation of autoregressive-based transformer decoder models like GPT-2, GPT-J, and OPT. But, the repository is under active development and may contain bugs. 
+
 Please refer to https://github.com/aws-neuron/transformers-neuronx.
 
-
-- `compile_cv.py`: You can compile VGG, ResNet, ResNeXt, EfficientNet, and ViT models with this example code.
-- `compile_nlp.py`: You can compile BERT-based encoder models like BERT, DistilBERT, ALBERT, RoBERTa with this example code.
-- `benchmark_nlp.py`: Perform latency and throughput benchmarking of BERT-based classification models.
-
 ```bash
-# BERT Example
-$ cd ~ && source aws_neuron_venv_pytorch/bin/activate && cd aws-inferentia/trn1_and_inf2
-$ python3 benchmark_nlp.py --max_length 128 --model_id distilbert-base-uncased-finetuned-sst-2-english
+# Installation
+$ cd ~ && source aws_neuron_venv_pytorch/bin/activate
+$ pip install git+https://github.com/aws-neuron/transformers-neuronx.git
+```
+es tens of minutes or more to compile the model. See the experimental results below.
 
-# Image classification Example
-$ cd ~ && source aws_neuron_venv_pytorch/bin/activate && cd aws-inferentia/trn1_and_inf2
-$ python3 compile_cv.py
+- `gpt2.py`: GPT-2 and KoGPT-2 (base, medium, large, xl)
+- `gptj.py`: GPT-J-6B
+- `opt.py`: OPT-13B, OPT-30B, OPT-66B
+
+OPT model takes tens of minutes or more to compile and recommends `inf2.48xlarge`. See the experimental results below. 
+
+```
+tp_degree=2, batch_size=2, seq_length=2048
+Compile and Load: 1148.926 seconds
+Inference: 157.738 seconds
+
+tp_degree=4, batch_size=2, seq_length=2048
+Compile and Load: 814.757 seconds
+Inference: 89.753 seconds
+
+tp_degree=8, batch_size=2, seq_length=2048
+Compile and Load: 692.357 seconds
+Inference: 65.267 seconds
 ```
 
 ## Caution
