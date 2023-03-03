@@ -49,7 +49,7 @@ Please refer to https://github.com/aws-neuron/transformers-neuronx.
 $ cd ~ && source aws_neuron_venv_pytorch/bin/activate
 $ pip install git+https://github.com/aws-neuron/transformers-neuronx.git
 ```
-es tens of minutes or more to compile the model. See the experimental results below.
+Please note that OPT-based models take tens of minutes or more to compile the model. See the experimental results below.
 
 - `gpt2.py`: GPT-2 and KoGPT-2 (base, medium, large, xl)
 - `gptj.py`: GPT-J-6B
